@@ -7,28 +7,25 @@ class MemoryGame {
   }
 
   shuffleCards() {
-
     if (!this.cards) {
       return undefined
     };
-    for (let i = this.cards.length - 1; i > 0; i--) {
+    const cardsClone = JSON.parse(JSON.stringify(this.cards));
+    for (let i = cardsClone.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+      [cardsClone[i], cardsClone[j]] = [cardsClone[j], cardsClone[i]];
     }
-    return this.cards;
-  };
-
-
-
-
-  // define a function that can be reused
-  // create a copy of the array so that the original array is not mutated
-
-
-
+    this.cards = cardsClone;
+    return cardsClone;
+  }
 
   checkIfPair(card1, card2) {
-    // ... write your code here
+    this.pairsClicked += 1;
+    if (card1 === card2) {
+      this.pairsGuessed += 1;
+      return true;
+    }
+    return false;
   }
 
   checkIfFinished() {

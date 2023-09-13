@@ -27,6 +27,8 @@ const cards = [
 
 const memoryGame = new MemoryGame(cards);
 
+
+
 window.addEventListener('load', (event) => {
   let html = '';
   memoryGame.cards.forEach((pic) => {
@@ -42,11 +44,45 @@ window.addEventListener('load', (event) => {
   document.querySelector('#memory-board').innerHTML = html;
 
 
+  let isWaiting = false;
+
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
-      // TODO: write some code here
-      console.log(`Card clicked: ${card}`);
+
+      if (isWaiting) {
+        return;
+      }
+
+      card.classList.toggle('turned');
+      memoryGame.pickedCards.push(card);
+
+      if (memoryGame.pickedCards.length === 2) {
+        const card1 = memoryGame.pickedCards[0];
+        const card2 = memoryGame.pickedCards[1];
+
+        const isPair = memoryGame.checkIfPair(
+          card1.getAttribute('data-card-name'),
+          card2.getAttribute('data-card-name')
+        );
+
+        document.getElementById('pairs-clicked').textContent = `Pairs clicked: ${memoryGame.pairsClicked}`;
+        document.getElementById('pairs-guessed').textContent = `Pairs guessed: ${memoryGame.pairsGuessed}`;
+
+        if (isPair) {
+
+        } else {
+
+          isWaiting = true;
+          setTimeout(() => {
+            card1.classList.remove('turned');
+            card2.classList.remove('turned');
+            isWaiting = false;
+          }, 1500);
+        }
+        memoryGame.pickedCards = [];
+      }
     });
   });
+
 });
